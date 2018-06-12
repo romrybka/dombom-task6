@@ -1,0 +1,75 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgb(176, 231, 114);
+}
+
+li {
+  list-style-type: none;
+}
+
+.container {
+  margin: 0px auto;
+  width: auto;
+}
+
+.card {
+  width: 350px;
+  margin: 1rem auto;
+  padding: 1rem;
+  border-radius: 2px;
+  background-color: white;
+  box-shadow: 1px 1px 5px rgba(73, 71, 71, 0.8);
+}
+
+.employeeList {
+  margin: 1rem 0;
+}
+
+.employeeCount {
+  font-weight: bold;
+  color: rgb(16, 85, 9);
+}
+
+
+/* form */
+.employee-group {
+  margin: .5rem 0;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.employee-label {
+  width: 100px;
+}
+
+.employee-input {
+  flex: 1;
+}
+
+.addEmployee {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  color: white;
+  text-transform: uppercase;
+  background-color: rgb(19, 153, 37);
+}
+
+.addEmployee:focus {
+  outline: none;
+}
+
+.reset {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  color: white;
+  text-transform: uppercase;
+  background-color: rgb(219, 199, 16);
+}
