@@ -23,7 +23,8 @@ const $firstName = document.querySelector('#firstName'),
       $salary = document.querySelector('#salary'),
       $position = document.querySelector('#position');
 
-const $addBtn = document.getElementsByClassName('addEmployee')[0];
+const $resetBtn = document.getElementsByClassName('reset')[0];
+
 
 let employeeArr;
 let numberOfEmployees = 0;
@@ -34,45 +35,74 @@ loadEventListeners();
 
 // Load all event Listeners
 function loadEventListeners() {
+  document.addEventListener('DOMContentLoaded', getEmployees);
+
   $form.addEventListener('submit', addEmployee);
+
+  $resetBtn.addEventListener('click', resetList);
+}
+
+// get employees from local storage
+function getEmployees() {
+  if (localStorage.getItem('employeeArr') === null) {
+    employeeArr = [];
+  } else {
+    employeeArr = Array.from(JSON.parse(localStorage.getItem('employeeArr')));
+    numberOfEmployees = employeeArr.length;
+
+    employeeArr.forEach(function(employee, index) {
+      let li = document.createElement('li');
+      li.className = 'employeeListItem';
+      li.innerHTML = `
+        <span class="employeeCount">${index+1}</span>
+        <span class="employeeFirstName">${employee.firstName}</span>
+        <span class="employeeLastName">${employee.lastName}</span>,
+        <span class="employeeSalary">${employee.salary}</span>,
+        <span class="employeePosition">${employee.position}</span>
+      `
+      $employeeList.appendChild(li);
+    })
+    
+    // updating the amount of employees
+    $employeeNumber.textContent = numberOfEmployees;
+  
+    // average salary calculation
+    let totalSal = salarySum(employeeArr);
+    let averageSalary = Math.floor(totalSal / numberOfEmployees);
+  
+    // updating the amount of average salary
+    $averageSalary.textContent = averageSalary;
+  }
 
 }
 
 // add employee
 function addEmployee(e) {
-  if (numberOfEmployees === 0) {
-    employeeArr = [];
-  }
-  
   // creating new employee
   let employee = new Employee($firstName.value, $lastName.value, $salary.value, $position.value);
 
   // check for duplication
   if (numberOfEmployees > 0) {
     let isDuplicated = checkForDuplication(employee, employeeArr);
-
-    console.log(isDuplicated);
     
     if (isDuplicated) {
       alert('the person is already in your list');
-// ! --------------------
-// після даного рядку перезавнтажує сторінку
-// чому? не можу зрозуміти
-// я лише хочу щоб мені не додавало працівника у список 
-// ! --------------------
-      return false;
+      return;
     }
-  }
+  } 
   
+  // add employee to arr
   employeeArr.push(employee);
-  numberOfEmployees ++;
+  // save arr with all employees to lacal storage
+  localStorage.setItem('employeeArr', JSON.stringify(employeeArr));
 
+  numberOfEmployees ++;
   // updating the amount of employees
   $employeeNumber.textContent = numberOfEmployees;
 
   // average salary calculation
   let totalSal = salarySum(employeeArr);
-  let averageSalary = totalSal / numberOfEmployees;
+  let averageSalary = Math.floor(totalSal / numberOfEmployees);
 
   // updating the amount of average salary
   $averageSalary.textContent = averageSalary;
@@ -109,7 +139,14 @@ function addEmployee(e) {
     $addBtn.style.backgroundColor = 'rgb(19, 153, 37, .75)';
   }
 
+  $firstName.focus();
   e.preventDefault();
+}
+
+// clear liast
+function resetList() {
+  localStorage.clear();
+  location.reload();
 }
 
 // create new employee 
